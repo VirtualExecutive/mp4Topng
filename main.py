@@ -1,8 +1,15 @@
-
 import os
-from moviepy.editor import VideoFileClip
+from moviepy import VideoFileClip
+
+def check_and_create_directory(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+        print(f"{directory} klasörü oluşturuldu.")
 
 def extract_frames(movie, imgdir, frames_per_second):
+    # Klasör kontrolü
+    check_and_create_directory(imgdir)
+    
     clip = VideoFileClip(movie)
     duration = clip.duration  # Video süresi
     fps = clip.fps  # Orijinal framerate
@@ -28,10 +35,14 @@ def extract_frames(movie, imgdir, frames_per_second):
 
 def ClearFrames():
     # Temizlik için frames klasörünü temizle    
-    files = os.listdir(imgdir)
-    for file in files:
-        if file.endswith('.png'):
-            os.remove(os.path.join(imgdir, file))
+    if os.path.exists(imgdir):
+        files = os.listdir(imgdir)
+        for file in files:
+            if file.endswith('.png'):
+                os.remove(os.path.join(imgdir, file))
+        print(f"{imgdir} klasörü temizlendi.")
+    else:
+        print(f"{imgdir} klasörü bulunamadı.")
 
 
 # Kullanım
